@@ -1,10 +1,26 @@
 <!doctype html>
 <html>
 <head>
-    <title></title>
+    <title>Street Art Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/js/vue.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+
 </head>
 <body>
-    <script src="/js/vue.js"></script>
+    <div id="main">
+        <h2>Street Art Gallery</h2>
+        <div v-if="images.length" class="container">
+            <div class="element" v-for="image in images">
+                <img :src="image.url" alt=""/>
+                <h2>{{image.title}}</h2>
+                <button id="showComment">Show Comments</button>
+                <modal v-if="showComment"
+            </div>
+        </div>
+
+    </div>
     <script src="/js/axios.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
