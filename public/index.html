@@ -33,9 +33,15 @@
                 </div>
             </form>
         </div>
+        <div class="center w-30 flex justify-around pa2">
+            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" v-if="page != 1" @click="page--">Previous</button>
+            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
+            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" @click="page++">Next</button>
+        </div>
         <div v-if="images.length" class="flex flex-wrap w-100 justify-around pa2-ns">
+
             <image-card
-                v-for="image in images"
+                v-for="image in displayedImages"
                 @launch-modal="launchModal"
                 :image="image"
                 :key="image.id">
