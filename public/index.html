@@ -3,23 +3,99 @@
 <head>
     <title>Street Art Gallery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/vue-router"></script>
     <script src="/js/vue.js"></script>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
 
 </head>
-<body>
+<body class="sans-serif ma0 pa0 db">
     <div id="main">
-        <h2>Street Art Gallery</h2>
-        <div v-if="images.length" class="container">
-            <div class="element" v-for="image in images">
-                <img :src="image.url" alt=""/>
-                <h2>{{image.title}}</h2>
-                <button id="showComment">Show Comments</button>
-                <modal v-if="showComment"
+        <div class="bb bg-dark-gray bw2 moon-gray w-100">
+            <h2 class="f1 lh-title h-40 ma0 pa2">Street Art Gallery</h2>
+            <form class="f4 h-60 w-100 w-90-m w-80-ns pa2 center flex moon-gray input-reset black">
+                <div class="w-100 flex flex-wrap pa2">
+                    <div class="w-80 w-50-m w-30-ns">
+                        <label for="title" class="db f6">Title</label>
+                        <input v-model = "form.title" name="title" type="text">
+                    </div>
+                    <div class="w-80 w-50-m w-30-ns">
+                        <label for="description" class="db f6">Description</label>
+                        <input v-model = "form.description" name="description" type="text" >
+                    </div>
+                    <div class="w-80 w-50-m w-30-ns">
+                        <label for="username" class="db f6">Username</label>
+                        <input v-model = "form.username" name="username" type="text">
+                    </div>
+                    <div class="mw6 pa2">
+                        <input name="file" type="file" accept="*/image" @change='handleFileChange' class="mt1">
+                        <button type="button" name="button" @click.stop.prevent='uploadFile' class="mw6 w-4 center ma2">Upload Image</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div v-if="images.length" class="flex flex-wrap w-100 justify-around pa2-ns">
+            <image-card
+                v-for="image in images"
+                @launch-modal="launchModal"
+                :image="image"
+                :key="image.id">
+            </image-card>
+        </div>
+        <image-modal-template
+            :image="modalImage"
+            v-if="showModal"
+            @close="closeModal"
+        ></image-modal-template>
+    </div>
+    <script type="text/x-template" id="image-modal-template">
+        <div class="aspect-ratio--object fixed bg-black flex justify-around align-center v-mid" @click="$emit('close')" id="modal-background">
+            <div class="h-75 w-90 w-80-m w-50-ns bg-white ba br4 pa3 overflow-y-scroll" @click.stop id="modal-content">
+                <div class="aspect-ratio aspect-ratio--16x9 h-50 center">
+                    <div class="aspect-ratio--object cover" :style="{ background: 'url(' + image.url + ') center'}">
+                    </div>
+                </div>
+                <div>
+                    <p>
+                        title: {{image.title}}, about: {{image.description}}
+                    </p>
+                </div>
+                <div class="overflow-y-scroll">
+                    <form class="f4 h-60 w-100 pa2 flex flex-wrap moon-gray input-reset black">
+                        <div class="w-80 w-40-m w-40-ns center">
+                            <label for="comment" class="db f6">Comment</label>
+                            <input name="comment" type="text" v-model="comment">
+                        </div>
+                        <div class="w-80 w-40-m w-40-ns center">
+                            <label for="username" class="db f6">Username</label>
+                            <input name="username" type="text" v-model="username">
+                        </div>
+                        <div class="w-50 w-20-ns center">
+                            <button type="button" name="button" @click.stop.prevent="postComment">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div v-if="comments.length">
+                    <div v-for="comment in comments" class="bb pa2">
+                        {{comment.comment}} - {{comment.username}}
+                    </div>
+                </div>
             </div>
         </div>
-
-    </div>
+    </script>
+    <script type="text/x-template" id="image-card">
+        <div class="w-100 w-40-m w-25-ns pa2 flex flex-column bg-light-gray justify-between h-4 ba bw2 b--dark-blue br3 ma2 hover-black:hover hover-black:focus" >
+            <div class="aspect-ratio aspect-ratio--1x1">
+                <div class="aspect-ratio--object cover" :style="{ background: 'url(' + image.url + ') center'}">
+                </div>
+            </div>
+            <div class="">
+                <h2>{{image.title}}</h2>
+                <a :href="'#' + image.id">
+                    <button id="showModal" @click="launchModal" class="shadow:hover">Show Comments</button>
+                </a>
+            </div>
+        </div>
+    </script>
     <script src="/js/axios.min.js"></script>
     <script src="js/script.js"></script>
 </body>
