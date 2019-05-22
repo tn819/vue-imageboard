@@ -11,7 +11,7 @@
 <body class="sans-serif ma0 pa0 db">
     <div id="main">
         <div class="bb bg-dark-gray bw2 moon-gray w-100">
-            <h2 class="f1 lh-title h-40 ma0 pa2">Street Art Gallery</h2>
+            <h2 class="f1 lh-title h-40 ma0 pa2 w-90">Street Art Gallery</h2>
             <form class="f4 h-60 w-100 w-90-m w-80-ns pa2 center flex moon-gray input-reset black">
                 <div class="w-100 flex flex-wrap pa2">
                     <div class="w-80 w-50-m w-30-ns">
@@ -26,7 +26,7 @@
                         <label for="username" class="db f6">Username</label>
                         <input v-model = "form.username" name="username" type="text">
                     </div>
-                    <div class="mw6 pa2">
+                    <div class="w-80 pa2">
                         <input name="file" type="file" accept="*/image" @change='handleFileChange' class="mt1">
                         <button type="button" name="button" @click.stop.prevent='uploadFile' class="mw6 w-4 center ma2">Upload Image</button>
                     </div>
@@ -34,9 +34,9 @@
             </form>
         </div>
         <div class="center w-30 flex justify-around pa2">
-            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" v-if="page != 1" @click="page--">Previous</button>
-            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
-            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" @click="page++">Next</button>
+            <button class="f6 link dim br2 ba bw2 ph3 pv2 mb2 dib dark-gray" v-if="page != 1" @click="page--">Previous</button>
+            <button class="f6 link dim br2 ba bw2 ph3 pv2 mb2 dib dark-gray" v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
+            <button class="f6 link dim br2 ba bw2 ph3 pv2 mb2 dib dark-gray" @click="page++">Next</button>
         </div>
         <div v-if="images.length" class="flex flex-wrap w-100 justify-around pa2-ns">
 
@@ -46,6 +46,11 @@
                 :image="image"
                 :key="image.id">
             </image-card>
+        </div>
+        <div class="center w-30 flex justify-around pa2">
+            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" v-if="page != 1" @click="page--">Previous</button>
+            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" v-for="pageNumber in pages" @click="page = pageNumber"> {{pageNumber}} </button>
+            <button class="f6 link dim br2 ba bw1 ph3 pv2 mb2 dib black" @click="page++">Next</button>
         </div>
         <image-modal-template
             :image="modalImage"
@@ -89,10 +94,12 @@
         </div>
     </script>
     <script type="text/x-template" id="image-card">
-        <div class="w-100 w-40-m w-25-ns pa2 flex flex-column bg-light-gray justify-between h-4 ba bw2 b--dark-blue br3 ma2 hover-black:hover hover-black:focus" >
+        <div class="w-90 w-40-m w-25-ns pa2 flex flex-column bg-light-gray justify-between h-4 ba bw2 b--dark-blue br3 ma2 hover-black:hover hover-black:focus" >
             <div class="aspect-ratio aspect-ratio--1x1">
-                <div class="aspect-ratio--object cover" :style="{ background: 'url(' + image.url + ') center'}">
-                </div>
+                <a :href="'#' + image.id">
+                    <div class="aspect-ratio--object cover dim" :style="{ background: 'url(' + image.url + ') center'}" @click="launchModal">
+                    </div>
+                </a>
             </div>
             <div class="">
                 <h2>{{image.title}}</h2>
